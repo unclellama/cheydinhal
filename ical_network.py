@@ -4,7 +4,7 @@
 
 import itertools
 from icalendar import Calendar, Event, vCalAddress, vText
-from datetime import datetime
+from datetime import datetime, date
 import networkx as nx
 
 # =================================
@@ -42,7 +42,11 @@ class Meeting:
         if isinstance(attendees, str): # fix for one-prson meetings
             attendees = [attendees]
         self.attendees = [name.replace('mailto:', '') for name in attendees]
-        self.time = time
+        self.date = time.dt
+        try:
+            self.date = self.date.date()
+        except:
+            pass
         self.info = info
 
         # flag any hosts or attendees we don't want to make into nodes
@@ -111,6 +115,19 @@ def combine_meetings(meeting_lists):
         print('new length: ', len(comblist))
     return comblist
     
+    
+# =================================
+# filtering meetings
+
+
+def filter_meetings(meetings, dates = ['2000-01-01', '2050-12-31']):
+    # filter a list of Meetings by time range, ...
+    
+    dates = [date.fromisoformat(dates[0]), date.fromisoformat(dates[1])]
+    meetings = [m for m in meetings if m.date > dates[0]]
+    meetings = [m for m in meetings if m.date < dates[1]]
+    return meetings
+    
                   
 # =================================
 # generating graphs and exporting
@@ -144,5 +161,5 @@ def make_graph(people, meetings, filename = "outputs/con.gexf", write = True):
     g = setup_nodes(people)
     g_e = setup_edges(g, meetings)
     if write:
-        nx.write_gexf(g, filename)
+        nx.write_gexf(g_e, filename)
     return g_e
