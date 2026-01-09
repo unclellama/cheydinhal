@@ -6,37 +6,17 @@ import itertools
 from icalendar import Calendar, Event, vCalAddress, vText
 from datetime import datetime, date
 import networkx as nx
-
-# =================================
-# Person objects represent the nodes in the graphs;
-# later we can give them whatever attributes, right now i'm just coloring them
-
-default_colors = {'gmail.com': {'r': 39, 'g': 105, 'b': 255, 'a': 0.5},
-            'defaultcolor': {'r': 100, 'g': 100, 'b': 100, 'a':  0.5}}
-            
-
-class Person:
-    def __init__(self, name, colors = default_colors):
-        self.name = name
-        for identifier in colors:
-            if identifier in name:
-                self.color = colors[identifier]
-                self.group = identifier
-        if not hasattr(self, 'group'):
-            try:
-                self.color = colors['defaultcolor']
-            except:
-                self.color = {'r': 100, 'g': 100, 'b': 100, 'a':  0.5}
-            self.group = ''
-            
+from collections import Counter
+          
         
 # =================================
-# load ical files, get meetings, get people
+# load ical files, get meetings
         
 class Meeting:
     # each Meeting represents a single icalendar event, and the implicated Persons
     
-    def __init__(self, uid, host, attendees, time, info, droids=['calendar.google.com']):
+    def __init__(self, uid, host, attendees, time, summary,
+                    droids=['calendar.google.com']):
         self.uid = uid
         self.host = host.replace('mailto:', '')
         if isinstance(attendees, str): # fix for one-prson meetings
@@ -47,7 +27,7 @@ class Meeting:
             self.date = self.date.date()
         except:
             pass
-        self.info = info
+        self.summary = summary
 
         # flag any hosts or attendees we don't want to make into nodes
         if any(droid in self.host for droid in droids):
@@ -79,22 +59,6 @@ def load_single_ical(filename, droids = ['calendar.google.com']):
                 pass # if a calendar vevent does not have these keys, it's not a meeting
     cal.close()
     return meetlist
-     
-    
-def find_people(meetings, colors = default_colors, blocklist = ['droid']):
-    # generate a list of Persons based on the name list; can give them a node color based 
-    # on their email address using colors = {}.
-    # some names are already set to 'droid' (not people) on initiating Meetings.
-    # any other names to be filtered out can be added to blocklist = [].
-    names = []
-    people = []
-    for n in range(len(meetings)):
-        names = names + meetings[n].attendees
-    names = list(set(names)) # kill duplicates
-    for name in names:
-        if name not in blocklist:
-            people.append(Person(name, colors = colors))
-    return people
     
     
 def combine_meetings(meeting_lists):
@@ -117,17 +81,79 @@ def combine_meetings(meeting_lists):
     
     
 # =================================
-# filtering meetings
+# processing meetings-lists
 
 
-def filter_meetings(meetings, dates = ['2000-01-01', '2050-12-31']):
+def filter_meetings(meetings, dates = ['2000-01-01', '2050-12-31'], 
+                        filter_in_group = False, filter_one_to_one = False):
     # filter a list of Meetings by time range, ...
+    
+    try:
+        doesthiswork = meetings[0].one_to_one
+    except:
+        categorize_meetings(meetings)
     
     dates = [date.fromisoformat(dates[0]), date.fromisoformat(dates[1])]
     meetings = [m for m in meetings if m.date > dates[0]]
     meetings = [m for m in meetings if m.date < dates[1]]
+    if filter_in_group:
+        meetings = [m for m in meetings if not m.in_group]
+    if filter_one_to_one:
+        meetings = [m for m in meetings if not m.one_to_one]
     return meetings
-    
+        
+
+def categorize_meetings(meetings, what_is_large = 10):
+    # categorize meetings based on properties of the meeting-list
+    summaries = [m.summary for m in meetings]
+    counts = Counter(summaries)
+    for m in meetings:
+        m.repeats = counts[m.summary]
+        m.repeating = True if counts[m.summary] > 1 else False
+        m.one_to_one = True if len(m.attendees) == 2 else False
+        m.large_meeting = True if len(m.attendees) > what_is_large else False
+        m.groups = list(set([a.partition('@')[2] for a in m.attendees]))
+        m.in_group = True if len(m.groups) == 1 else False
+        
+
+# =================================
+# Person objects represent the nodes in the graphs;
+# later we can give them whatever attributes, right now i'm just coloring them
+
+default_colors = {'gmail.com': {'r': 39, 'g': 105, 'b': 255, 'a': 0.5},
+            'defaultcolor': {'r': 100, 'g': 100, 'b': 100, 'a':  0.5}}
+            
+
+class Person:
+    def __init__(self, name, colors = default_colors):
+        self.name = name
+        for identifier in colors:
+            if identifier in name:
+                self.color = colors[identifier]
+                self.group = identifier
+        if not hasattr(self, 'group'):
+            try:
+                self.color = colors['defaultcolor']
+            except:
+                self.color = {'r': 100, 'g': 100, 'b': 100, 'a':  0.5}
+            self.group = ''
+            
+            
+def find_people(meetings, colors = default_colors, blocklist = ['droid']):
+    # generate a list of Persons based on the name list; can give them a node color based 
+    # on their email address using colors = {}.
+    # some names are already set to 'droid' (not people) on initiating Meetings.
+    # any other names to be filtered out can be added to blocklist = [].
+    names = []
+    people = []
+    for n in range(len(meetings)):
+        names = names + meetings[n].attendees
+    names = list(set(names)) # kill duplicates
+    for name in names:
+        if name not in blocklist:
+            people.append(Person(name, colors = colors))
+    return people
+        
                   
 # =================================
 # generating graphs and exporting
@@ -147,10 +173,10 @@ def setup_edges(g, meetings):
             if g.has_node(connect[0]) and g.has_node(connect[1]): # avoid adding nodes!
                 if g.has_edge(connect[0], connect[1]):
                     g[connect[0]][connect[1]]['weight'] += 1.
-                    g[connect[0]][connect[1]]['info'] += ' ' + str(meeting.info) + '\n'
+                    g[connect[0]][connect[1]]['summary'] += ' ' +str(meeting.summary)+'\n'
                 else:
                     g.add_edge(connect[0], connect[1], weight = 1, 
-                                info = str(meeting.info))
+                                summary = str(meeting.summary))
     return g
     
     
