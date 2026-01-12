@@ -85,7 +85,7 @@ def combine_meetings(meeting_lists):
 
 
 def filter_meetings(meetings, dates = ['2000-01-01', '2050-12-31'], 
-                        filter_in_group = False, filter_one_to_one = False):
+                        filter_group = 'None', filter_one_to_one = False):
     # filter a list of Meetings by time range, ...
     
     try:
@@ -96,10 +96,12 @@ def filter_meetings(meetings, dates = ['2000-01-01', '2050-12-31'],
     dates = [date.fromisoformat(dates[0]), date.fromisoformat(dates[1])]
     meetings = [m for m in meetings if m.date > dates[0]]
     meetings = [m for m in meetings if m.date < dates[1]]
-    if filter_in_group:
-        meetings = [m for m in meetings if not m.in_group]
+    if filter_group == 'single':
+        meetings = [m for m in meetings if len(m.groups) == 1]
+    if filter_group == 'multi':
+        meetings = [m for m in meetings if len(m.groups) > 1]
     if filter_one_to_one:
-        meetings = [m for m in meetings if not m.one_to_one]
+        meetings = [m for m in meetings if m.one_to_one]
     return meetings
         
 
@@ -113,7 +115,6 @@ def categorize_meetings(meetings, what_is_large = 10):
         m.one_to_one = True if len(m.attendees) == 2 else False
         m.large_meeting = True if len(m.attendees) > what_is_large else False
         m.groups = list(set([a.partition('@')[2] for a in m.attendees]))
-        m.in_group = True if len(m.groups) == 1 else False
         
 
 # =================================
