@@ -1,7 +1,7 @@
 # somecolors grabbed from here: https://www.thoravej29.dk/da/communitymedlemmer
 # the 'colors' string is matched to any part of the email address
 
-colors = {'ogtal': {'r': 39, 'g': 105, 'b': 255, 'a': 0.5},
+tv29_colors = {'ogtal': {'r': 39, 'g': 105, 'b': 255, 'a': 0.5},
             'ogdata': {'r': 163, 'g': 119, 'b': 212, 'a':  0.5},
             'bikuben': {'r': 37, 'g': 150, 'b': 190, 'a':  0.5},
             'impactinsider': {'r': 255, 'g': 91, 'b': 164, 'a':  0.5},
@@ -18,3 +18,10 @@ colors = {'ogtal': {'r': 39, 'g': 105, 'b': 255, 'a': 0.5},
             'thoravej29': {'r': 255, 'g': 255, 'b': 255, 'a':  1},
             'insitu.dk': {'r': 206, 'g': 217, 'b': 230, 'a':  0.5},
             'hautscene.dk' : {'r': 240, 'g': 22, 'b': 233, 'a':  0.5}}
+    
+# list of probably unwanted email addresses for the house network
+            
+tv29_blocklist = ['droid',
+                    'group.calendar.google.com', # a few of these are flagged as ['CUTYPE'] = 'INDIVIDUAL' in the real ical data :()
+                    'allepaathoravej@thoravej29.dk',
+                    'ogtal@ogtal.dk']
