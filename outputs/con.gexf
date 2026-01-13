@@ -6,39 +6,16 @@
   <graph defaultedgetype="undirected" mode="static" name="">
     <attributes mode="static" class="edge">
       <attribute id="1" title="summary" type="string" />
+      <attribute id="2" title="description" type="string" />
     </attributes>
     <attributes mode="static" class="node">
       <attribute id="0" title="group" type="string" />
     </attributes>
     <nodes>
-      <node id="unwanted@friend.net" label="unwanted@friend.net">
-        <viz:color r="37" g="0" b="200" a="0.5" />
-        <attvalues>
-          <attvalue for="0" value="friend.net" />
-        </attvalues>
-      </node>
-      <node id="daniel@test.mail" label="daniel@test.mail">
-        <viz:color r="39" g="105" b="255" a="0.5" />
-        <attvalues>
-          <attvalue for="0" value="test.mail" />
-        </attvalues>
-      </node>
-      <node id="johnella@evil.mail" label="johnella@evil.mail">
-        <viz:color r="163" g="119" b="212" a="0.5" />
-        <attvalues>
-          <attvalue for="0" value="evil.mail" />
-        </attvalues>
-      </node>
       <node id="garfield@pets.com" label="garfield@pets.com">
         <viz:color r="37" g="150" b="190" a="0.5" />
         <attvalues>
           <attvalue for="0" value="pets.com" />
-        </attvalues>
-      </node>
-      <node id="felix@evil.mail" label="felix@evil.mail">
-        <viz:color r="163" g="119" b="212" a="0.5" />
-        <attvalues>
-          <attvalue for="0" value="evil.mail" />
         </attvalues>
       </node>
       <node id="sandra@test.mail" label="sandra@test.mail">
@@ -47,61 +24,96 @@
           <attvalue for="0" value="test.mail" />
         </attvalues>
       </node>
+      <node id="daniel@test.mail" label="daniel@test.mail">
+        <viz:color r="39" g="105" b="255" a="0.5" />
+        <attvalues>
+          <attvalue for="0" value="test.mail" />
+        </attvalues>
+      </node>
+      <node id="unwanted@friend.net" label="unwanted@friend.net">
+        <viz:color r="37" g="0" b="200" a="0.5" />
+        <attvalues>
+          <attvalue for="0" value="friend.net" />
+        </attvalues>
+      </node>
+      <node id="johnella@evil.mail" label="johnella@evil.mail">
+        <viz:color r="163" g="119" b="212" a="0.5" />
+        <attvalues>
+          <attvalue for="0" value="evil.mail" />
+        </attvalues>
+      </node>
+      <node id="felix@evil.mail" label="felix@evil.mail">
+        <viz:color r="163" g="119" b="212" a="0.5" />
+        <attvalues>
+          <attvalue for="0" value="evil.mail" />
+        </attvalues>
+      </node>
     </nodes>
     <edges>
-      <edge source="unwanted@friend.net" target="daniel@test.mail" id="0" weight="1">
+      <edge source="garfield@pets.com" target="daniel@test.mail" id="0" weight="1">
         <attvalues>
-          <attvalue for="1" value="lets go for a nice walk" />
+          <attvalue for="1" value="following up on: take over the world re. mondays&#10;" />
+          <attvalue for="2" value="&#10;" />
         </attvalues>
       </edge>
-      <edge source="daniel@test.mail" target="sandra@test.mail" id="1" weight="8.0">
+      <edge source="garfield@pets.com" target="sandra@test.mail" id="1" weight="1">
         <attvalues>
-          <attvalue for="1" value="pre-2025 in-house meeting 2025 in-house meeting 1&#10; 2025 in-house meeting 2&#10; 2025 in-house meeting 3&#10; opportunities to take over the world&#10; following up on: take over the world&#10; following up on: take over the world re. mondays&#10; post-2025 in-house meeting&#10;" />
+          <attvalue for="1" value="following up on: take over the world re. mondays&#10;" />
+          <attvalue for="2" value="&#10;" />
         </attvalues>
       </edge>
-      <edge source="daniel@test.mail" target="felix@evil.mail" id="2" weight="3.0">
+      <edge source="garfield@pets.com" target="felix@evil.mail" id="2" weight="1">
         <attvalues>
-          <attvalue for="1" value="opportunities to take over the world following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="1" value="following up on: take over the world re. mondays&#10;" />
+          <attvalue for="2" value="&#10;" />
         </attvalues>
       </edge>
-      <edge source="daniel@test.mail" target="johnella@evil.mail" id="3" weight="3.0">
+      <edge source="garfield@pets.com" target="johnella@evil.mail" id="3" weight="1">
         <attvalues>
-          <attvalue for="1" value="opportunities to take over the world following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="1" value="following up on: take over the world re. mondays&#10;" />
+          <attvalue for="2" value="&#10;" />
         </attvalues>
       </edge>
-      <edge source="daniel@test.mail" target="garfield@pets.com" id="4" weight="1">
+      <edge source="sandra@test.mail" target="daniel@test.mail" id="4" weight="8">
         <attvalues>
-          <attvalue for="1" value="following up on: take over the world re. mondays" />
+          <attvalue for="1" value="pre-2025 in-house meeting&#10; 2025 in-house meeting 1&#10; 2025 in-house meeting 2&#10; 2025 in-house meeting 3&#10; opportunities to take over the world&#10; following up on: take over the world&#10; following up on: take over the world re. mondays&#10; post-2025 in-house meeting&#10;" />
+          <attvalue for="2" value="&#10; &#10; &#10; &#10; &#10; &#10; &#10; &#10;" />
         </attvalues>
       </edge>
-      <edge source="johnella@evil.mail" target="sandra@test.mail" id="5" weight="3.0">
+      <edge source="sandra@test.mail" target="felix@evil.mail" id="5" weight="3">
         <attvalues>
-          <attvalue for="1" value="opportunities to take over the world following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="1" value="opportunities to take over the world&#10; following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="2" value="&#10; &#10; &#10;" />
         </attvalues>
       </edge>
-      <edge source="johnella@evil.mail" target="felix@evil.mail" id="6" weight="3.0">
+      <edge source="sandra@test.mail" target="johnella@evil.mail" id="6" weight="3">
         <attvalues>
-          <attvalue for="1" value="opportunities to take over the world following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="1" value="opportunities to take over the world&#10; following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="2" value="&#10; &#10; &#10;" />
         </attvalues>
       </edge>
-      <edge source="johnella@evil.mail" target="garfield@pets.com" id="7" weight="1">
+      <edge source="daniel@test.mail" target="unwanted@friend.net" id="7" weight="1">
         <attvalues>
-          <attvalue for="1" value="following up on: take over the world re. mondays" />
+          <attvalue for="1" value="lets go for a nice walk&#10;" />
+          <attvalue for="2" value="&#10;" />
         </attvalues>
       </edge>
-      <edge source="garfield@pets.com" target="sandra@test.mail" id="8" weight="1">
+      <edge source="daniel@test.mail" target="felix@evil.mail" id="8" weight="3">
         <attvalues>
-          <attvalue for="1" value="following up on: take over the world re. mondays" />
+          <attvalue for="1" value="opportunities to take over the world&#10; following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="2" value="&#10; &#10; &#10;" />
         </attvalues>
       </edge>
-      <edge source="garfield@pets.com" target="felix@evil.mail" id="9" weight="1">
+      <edge source="daniel@test.mail" target="johnella@evil.mail" id="9" weight="3">
         <attvalues>
-          <attvalue for="1" value="following up on: take over the world re. mondays" />
+          <attvalue for="1" value="opportunities to take over the world&#10; following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="2" value="&#10; &#10; &#10;" />
         </attvalues>
       </edge>
-      <edge source="felix@evil.mail" target="sandra@test.mail" id="10" weight="3.0">
+      <edge source="johnella@evil.mail" target="felix@evil.mail" id="10" weight="3">
         <attvalues>
-          <attvalue for="1" value="opportunities to take over the world following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="1" value="opportunities to take over the world&#10; following up on: take over the world&#10; following up on: take over the world re. mondays&#10;" />
+          <attvalue for="2" value="&#10; &#10; &#10;" />
         </attvalues>
       </edge>
     </edges>
