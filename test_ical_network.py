@@ -7,24 +7,27 @@
 # make any changes to  make_testdata.py :)
 
 import unittest
-import logging
 import os
 import pathlib
-from ical_network import Meeting, load_single_ical, filter_meetings, find_people, make_graph
-from make_testdata import make_testcal
+from ical_network import Meeting, load_single_ical, filter_meetings, combine_meetings
+from ical_network import find_people, make_graph
+from make_testdata import make_testcal, make_testcal_combine
 
 #from make_testdata import make_testcal
 
-test_answers = {'raw_length':9,
+test_answers = {'raw_length':9, # number of meetings for the first calendar, before filtering
+                'raw_length_combined':12, # number of unique meetings for the combined calendars
                 'inhouse_length':5,
                 'outofhouse_length':4,
                 'one_to_one_length':6,
                 'in_2025_length':7,
                 'length_after_blacklist':8,
                 'raw_people':6,  # there are 7 people in input people list, but one is a droid
+                'raw_people_combined':7,  # one new person is added in the second calendar
                 'people_after_blocklist':5, # 'unwanted@friend.net' is an example blocked address
                 'interactions_p1_p2':8, # interactions between daniel@test.mail, sandra@test.mail
-                'interactions_p1_p3':3} # inter between daniel@test.mail, felix@evil.mail}
+                'interactions_p1_p3':3, # inter between daniel@test.mail, felix@evil.mail}
+                }
 
 testcolors = {'test.mail': {'r': 39, 'g': 105, 'b': 255, 'a': 0.5},
                 'evil.mail': {'r': 163, 'g': 119, 'b': 212, 'a':  0.5},
@@ -35,13 +38,12 @@ testcolors = {'test.mail': {'r': 39, 'g': 105, 'b': 255, 'a': 0.5},
 class TestDataExists(unittest.TestCase):
     # test that the fake data script is actually spitting anything out
     def test(self):
-        try:
-            os.remove('test_files/test.ical')
-        except:
-            pass
-        make_testcal(testfile = 'test_files/test.ical')
         path = pathlib.Path("test_files/test.ical")
+        make_testcal(testfile = path)
         self.assertEqual((str(path), path.is_file()), (str(path), True))
+        path2 = pathlib.Path("test_files/test_combine.ical")
+        make_testcal_combine(testfile = path2)
+        self.assertEqual((str(path2), path.is_file()), (str(path2), True))
         
         
 class TestDataLoads(unittest.TestCase):
@@ -122,7 +124,21 @@ class TestEdges(unittest.TestCase):
         self.assertTrue(wt == test_answers['interactions_p1_p2'])
         wt = self.graph['daniel@test.mail']['felix@evil.mail']['weight']
         self.assertTrue(wt == test_answers['interactions_p1_p3'])
+        
+
+class TestCombine(unittest.TestCase):
+    # test the combining of two lists, discarding duplicate meetings
+    
+    def setUp(self):
+        self.m1 = load_single_ical("test_files/test.ical")
+        self.m2 = load_single_ical("test_files/test_combine.ical")
+        self.meetings = combine_meetings([self.m1, self.m2])
+        self.people = find_people(self.meetings, testcolors, blocklist = ['droid'])
+    
+    def test_raw_numbers(self):
+        self.assertTrue(len(self.meetings) == test_answers['raw_length_combined'])    
+    
     
         
-if __name__ == "__main_":
-    unittest.main()
+#if __name__ == "__main_":
+#    unittest.main()

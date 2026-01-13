@@ -10,9 +10,14 @@ import uuid
 
 # make some test calendars to test ical_network.py functionalities
 
+uid_linked_1 = uuid.uuid4()
+uid_linked_2 = uuid.uuid4()
+uid_linked_3 = uuid.uuid4()
+
 def make_testcal(testfile = 'test_files/test.ical'):
 
-    # this is a test calendar with eight meeting events (with uids) total.
+    # first test calendar. the three meetings with uid = uid_linked_1, (...) are shared
+    # with the second test calendar.
 
     people = ['daniel@test.mail', 'sandra@test.mail', 'felix@evil.mail', 'johnella@evil.mail',
             'garfield@pets.com', 'unwanted@friend.net', '12345678@calendar.google.com']
@@ -86,7 +91,7 @@ def make_testcal(testfile = 'test_files/test.ical'):
     event.add('summary', 'opportunities to take over the world')
     event.add('organizer', vCalAddress('mailto:'+ people[0]))
     event.add('dtstart', event_time)
-    event.add('uid', uuid.uuid4())
+    event.add('uid', uid_linked_1)
     event.add('attendee', vCalAddress('mailto:'+ people[0], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[1], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[2], params = accepted))
@@ -99,7 +104,7 @@ def make_testcal(testfile = 'test_files/test.ical'):
     event.add('summary', 'following up on: take over the world')
     event.add('organizer', vCalAddress('mailto:'+ people[3]))
     event.add('dtstart', event_time)
-    event.add('uid', uuid.uuid4())
+    event.add('uid', uid_linked_2)
     event.add('attendee', vCalAddress('mailto:'+ people[0], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[1], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[2], params = accepted))
@@ -112,7 +117,7 @@ def make_testcal(testfile = 'test_files/test.ical'):
     event.add('summary', 'following up on: take over the world re. mondays')
     event.add('organizer', vCalAddress('mailto:'+ people[3]))
     event.add('dtstart', event_time)
-    event.add('uid', uuid.uuid4())
+    event.add('uid', uid_linked_3)
     event.add('attendee', vCalAddress('mailto:'+ people[0], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[1], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[2], params = accepted))
@@ -142,12 +147,12 @@ def make_testcal_combine(testfile = 'test_files/test_combine.ical'):
     # compared to the first test calendar. shared events are repeated.
     # (the idea is that it is from the point of view of felix@evil.mail)
 
-    people = ['daniel@test.mail', 'sandra@test.mail', 
-            'felix@evil.mail', 'johnella@evil.mail', 'garfield@pets.com']
+    people = ['daniel@test.mail', 'sandra@test.mail', 'felix@evil.mail', 
+                'johnella@evil.mail', 'garfield@pets.com','ted_danson@ofir.dk']
             
     testcal = Calendar.example()
 
-    testcal.description = 'second test ical to be combined with the other one'
+    testcal.description = 'second test ical to be combined with the first one'
 
     accepted = {'PARTSTAT':'ACCEPTED', 'CUTYPE':'INDIVIDUAL'}
     declined = {'PARTSTAT':'DECLINED', 'CUTYPE':'INDIVIDUAL'}
@@ -159,7 +164,7 @@ def make_testcal_combine(testfile = 'test_files/test_combine.ical'):
     event.add('summary', 'opportunities to take over the world')
     event.add('organizer', vCalAddress('mailto:'+ people[0]))
     event.add('dtstart', event_time)
-    event.add('uid', uuid.uuid4())
+    event.add('uid', uid_linked_1)
     event.add('attendee', vCalAddress('mailto:'+ people[0], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[1], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[2], params = accepted))
@@ -172,7 +177,7 @@ def make_testcal_combine(testfile = 'test_files/test_combine.ical'):
     event.add('summary', 'following up on: take over the world')
     event.add('organizer', vCalAddress('mailto:'+ people[3]))
     event.add('dtstart', event_time)
-    event.add('uid', uuid.uuid4())
+    event.add('uid', uid_linked_2)
     event.add('attendee', vCalAddress('mailto:'+ people[0], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[1], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[2], params = accepted))
@@ -185,7 +190,7 @@ def make_testcal_combine(testfile = 'test_files/test_combine.ical'):
     event.add('summary', 'following up on: take over the world re. mondays')
     event.add('organizer', vCalAddress('mailto:'+ people[3]))
     event.add('dtstart', event_time)
-    event.add('uid', uuid.uuid4())
+    event.add('uid', uid_linked_3)
     event.add('attendee', vCalAddress('mailto:'+ people[0], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[1], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[2], params = accepted))
@@ -224,6 +229,7 @@ def make_testcal_combine(testfile = 'test_files/test_combine.ical'):
     event.add('organizer', vCalAddress('mailto:'+ people[2]))
     event.add('attendee', vCalAddress('mailto:'+ people[2], params = accepted))
     event.add('attendee', vCalAddress('mailto:'+ people[4], params = accepted))
+    event.add('attendee', vCalAddress('mailto:'+ people[5], params = accepted))
     testcal.add_component(event)
 
     print('writing test calendar')         
